@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsArray, IsObject } from 'class-validator';
+import { IsString, IsNumber, IsArray } from 'class-validator';
 
 export class FilmDto {
   @IsString()
