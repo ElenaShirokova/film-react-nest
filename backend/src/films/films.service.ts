@@ -18,7 +18,6 @@ export class FilmsService {
     return {
       total: film.schedule.length,
       items: film.schedule,
-      film: film
     };
   }
 }

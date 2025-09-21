@@ -10,7 +10,7 @@ export class Schedule {
   daytime: string;
 
   @Prop()
-  hall: string;
+  hall: number;
 
   @Prop()
   rows: number;

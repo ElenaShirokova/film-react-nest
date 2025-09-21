@@ -28,8 +28,8 @@ export class SheduleDto {
   id: string;
   @IsString()
   daytime: string;
-  @IsString()
-  hall: string;
+  @IsNumber()
+  hall: number;
   @IsNumber()
   rows: number;
   @IsNumber()
@@ -52,6 +52,4 @@ export class GetFilmDTO {
   total: number;
   @IsArray()
   items: SheduleDto[];
-  @IsObject()
-  film: FilmDto;
 }
