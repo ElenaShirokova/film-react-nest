@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsArray } from 'class-validator';
+import { IsString, IsNumber, IsArray, IsObject } from 'class-validator';
 
 export class FilmDto {
   @IsString()
@@ -52,4 +52,6 @@ export class GetFilmDTO {
   total: number;
   @IsArray()
   items: SheduleDto[];
+  @IsObject()
+  film: FilmDto;
 }
