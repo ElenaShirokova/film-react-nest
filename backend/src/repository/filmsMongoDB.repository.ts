@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
@@ -36,20 +36,6 @@ export class FilmsMongoDBRepository {
   }
 
   async findFilmById(id: string): Promise<FilmDocument> {
-    try {
-      const film = await this.filmModel.findOne({ id });
-      return film;
-    } catch {
-      throw new NotFoundException(`Фильм с таким Id ${id} не найден`);
-    }
-  }
-
-  async findScheduleIndexInFilm(filmId: string, session: string) {
-    const film = (await this.findFilmById(filmId)).toObject();
-    const scheduleIndex = film.schedule.findIndex((s) => s.id === session);
-    if (scheduleIndex === -1) {
-      throw new NotFoundException(`Для фильма '${film.title}' нет расписания`);
-    }
-    return scheduleIndex;
+    return await this.filmModel.findOne({ id });
   }
 }

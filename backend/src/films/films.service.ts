@@ -1,6 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 
 import { FilmsMongoDBRepository } from '../repository/filmsMongoDB.repository';
+import { NotFoundException } from '../exceptions/not-found-exception';
 
 @Injectable()
 export class FilmsService {
@@ -14,10 +15,14 @@ export class FilmsService {
   }
 
   async getSheduleFilm(id: string) {
-    const film = await this.filmsRepository.findFilmById(id);
-    return {
-      total: film.schedule.length,
-      items: film.schedule,
-    };
+    try {
+      const film = await this.filmsRepository.findFilmById(id);
+      return {
+        total: film.schedule.length,
+        items: film.schedule,
+      };
+    } catch {
+      throw new NotFoundException();
+    }
   }
 }

@@ -1,8 +1,10 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { BadRequestException, ConflictException } from '@nestjs/common';
 
 import { FilmsMongoDBRepository } from '../repository/filmsMongoDB.repository';
 import { ResponseOrderDto, CreateOrderDto } from './dto/order.dto';
+import { NotFoundException } from '../exceptions/not-found-exception';
+import { ConflictException } from '../exceptions/conflict-exception';
+import { AlreadyExistsException } from '../exceptions/bad-request-exception';
 
 @Injectable()
 export class OrderService {
@@ -15,38 +17,30 @@ export class OrderService {
     const tickets = orderData.tickets;
     for (const ticket of tickets) {
       if (this.filmsRepository instanceof FilmsMongoDBRepository) {
-        const film = (
-          await this.filmsRepository.findFilmById(ticket.film)
-        ).toObject();
-        const scheduleIndex =
-          await this.filmsRepository.findScheduleIndexInFilm(
-            ticket.film,
-            ticket.session,
+        try {
+          const film = await this.filmsRepository.findFilmById(ticket.film);
+          const filmObj = film.toObject();
+          const scheduleIndex = filmObj.schedule.findIndex(
+            (s) => s.id === ticket.session,
           );
-        const place = `${ticket.row}:${ticket.seat}`;
-
-        if (film.schedule[scheduleIndex].taken.includes(place)) {
-          throw new BadRequestException(`Место ${place} уже забронировано`);
+          if (scheduleIndex === -1) {
+            throw new NotFoundException();
+          }
+          const place = `${ticket.row}:${ticket.seat}`;
+          if (filmObj.schedule[scheduleIndex].taken.includes(place)) {
+            throw new AlreadyExistsException();
+          }
+          const scheduleTakenPlace = `schedule.${scheduleIndex.toString()}.taken`;
+          try {
+            await film.updateOne({ $push: { [scheduleTakenPlace]: place } });
+          } catch (error) {
+            throw new ConflictException();
+          }
+        } catch {
+          throw new NotFoundException();
         }
-        this.updateOccupiedSeatsFilmSession(ticket.film, scheduleIndex, place);
       }
     }
     return { items: tickets, total: tickets.length };
-  }
-
-  async updateOccupiedSeatsFilmSession(
-    filmId: string,
-    scheduleIndex: number,
-    place: string,
-  ): Promise<void> {
-    if (this.filmsRepository instanceof FilmsMongoDBRepository) {
-      const film = await this.filmsRepository.findFilmById(filmId);
-      const scheduleTakenPlace = `schedule.${scheduleIndex.toString()}.taken`;
-      try {
-        await film.updateOne({ $push: { [scheduleTakenPlace]: place } });
-      } catch (error) {
-        new ConflictException('Ошибка обновления данных');
-      }
-    }
   }
 }

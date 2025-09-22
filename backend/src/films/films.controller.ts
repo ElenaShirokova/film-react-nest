@@ -1,7 +1,9 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, UseFilters } from '@nestjs/common';
 import { FilmsService } from './films.service';
+import { AllExceptionFilter } from '../exceptions/exception-filter';
 
 @Controller('films')
+@UseFilters(AllExceptionFilter)
 export class FilmsController {
   constructor(private readonly filmService: FilmsService) {}
 
