@@ -8,7 +8,9 @@ import { NotFoundException } from '../exceptions/not-found-exception';
 export class FilmsService {
   constructor(
     @Inject('FILMS_REPOSITORY')
-    private readonly filmsRepository: | FilmsMongoDBRepository | FilmsPostgreSQLRepository,
+    private readonly filmsRepository:
+      | FilmsMongoDBRepository
+      | FilmsPostgreSQLRepository,
   ) {}
 
   async getAllFilms() {

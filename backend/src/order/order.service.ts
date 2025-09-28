@@ -11,7 +11,9 @@ import { AlreadyExistsException } from '../exceptions/bad-request-exception';
 export class OrderService {
   constructor(
     @Inject('FILMS_REPOSITORY')
-    private readonly filmsRepository: | FilmsMongoDBRepository | FilmsPostgreSQLRepository,
+    private readonly filmsRepository:
+      | FilmsMongoDBRepository
+      | FilmsPostgreSQLRepository,
   ) {}
 
   async createOrder(orderData: CreateOrderDto): Promise<ResponseOrderDto> {

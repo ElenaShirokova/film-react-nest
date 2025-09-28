@@ -29,27 +29,27 @@ export class DatabaseModule {
         exports.push('FILMS_REPOSITORY');
         break;
 
-       case 'postgres':
-        default:
-          imports.push(
-            TypeOrmModule.forRoot({
-              type: 'postgres',
-              host: applicationConfig.DATABASE_HOST,
-              port: +applicationConfig.DATABASE_PORT,
-              username: applicationConfig.DATABASE_USERNAME,
-              password: applicationConfig.DATABASE_PASSWORD,
-              database: applicationConfig.DATABASE_NAME,
-              entities: [FilmEntity, ScheduleEntity],
-              synchronize: false,
-            }),
-            TypeOrmModule.forFeature([FilmEntity, ScheduleEntity]),
-          );
-          providers.push({
-            provide: 'FILMS_REPOSITORY',
-            useClass: FilmsPostgreSQLRepository,
-          });
-          exports.push('FILMS_REPOSITORY');
-          break;
+      case 'postgres':
+      default:
+        imports.push(
+          TypeOrmModule.forRoot({
+            type: 'postgres',
+            host: applicationConfig.DATABASE_HOST,
+            port: +applicationConfig.DATABASE_PORT,
+            username: applicationConfig.DATABASE_USERNAME,
+            password: applicationConfig.DATABASE_PASSWORD,
+            database: applicationConfig.DATABASE_NAME,
+            entities: [FilmEntity, ScheduleEntity],
+            synchronize: false,
+          }),
+          TypeOrmModule.forFeature([FilmEntity, ScheduleEntity]),
+        );
+        providers.push({
+          provide: 'FILMS_REPOSITORY',
+          useClass: FilmsPostgreSQLRepository,
+        });
+        exports.push('FILMS_REPOSITORY');
+        break;
     }
 
     return {
