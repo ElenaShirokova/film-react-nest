@@ -12,14 +12,13 @@ import { OrderService } from './order/order.service';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: path.join(__dirname, '..', '..', 'public'),
+    }),
     DatabaseModule.register(applicationConfig.DATABASE_DRIVER),
     ConfigModule.forRoot({
       isGlobal: true,
       cache: true,
-    }),
-    ServeStaticModule.forRoot({
-      renderPath: '/content/afisha',
-      rootPath: path.join(__dirname, '..', 'public'),
     }),
   ],
   controllers: [FilmsController, OrderController],

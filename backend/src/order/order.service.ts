@@ -1,6 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 
 import { FilmsMongoDBRepository } from '../repository/filmsMongoDB.repository';
+import { FilmsPostgreSQLRepository } from '../repository/filmsPostgreSQL.repository';
 import { ResponseOrderDto, CreateOrderDto } from './dto/order.dto';
 import { NotFoundException } from '../exceptions/not-found-exception';
 import { ConflictException } from '../exceptions/conflict-exception';
@@ -10,7 +11,9 @@ import { AlreadyExistsException } from '../exceptions/bad-request-exception';
 export class OrderService {
   constructor(
     @Inject('FILMS_REPOSITORY')
-    private readonly filmsRepository: FilmsMongoDBRepository,
+    private readonly filmsRepository:
+      | FilmsMongoDBRepository
+      | FilmsPostgreSQLRepository,
   ) {}
 
   async createOrder(orderData: CreateOrderDto): Promise<ResponseOrderDto> {
