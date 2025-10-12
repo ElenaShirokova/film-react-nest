@@ -3,6 +3,7 @@ name: Film workflow project
 on:
   workflow_run:
     workflows: ["Tests 14 sprint"]
+    branches: [review-3]
     types:
       - completed
 
