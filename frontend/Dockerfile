@@ -1,7 +1,11 @@
-FROM node:20-alpine as build
+FROM node:20-alpine
+
 WORKDIR /app
-COPY package*.json ./
-RUN npm i
+
+COPY package.json package-lock.json ./
+
+RUN npm ci
+
 COPY . .
-RUN npm run build
-CMD cp -r dist result_build
+
+CMD ["npm", "run", "build"]
