@@ -98,5 +98,5 @@ jobs:
             echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
             echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> .env
             echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
-            sudo docker compose up -d --build
-            sudo docker compose exec -T npm run migrate:up
+            sudo docker compose up -d
+            sudo docker compose exec -T backend npm run migrate:up
