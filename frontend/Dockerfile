@@ -12,4 +12,4 @@ COPY . .
 
 RUN npm run build
 
-CMD ["cp", "-r", "dist result",_"dist"]
+CMD ["cp", "-r", "dist", "result_dist"]
